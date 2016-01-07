@@ -51,6 +51,13 @@
         }
         $this->newposition = $this->position;
         $this->newposition[$which] = 'x';
+        //pick the next available square
+        for($pos=0; $pos<9; $pos++){
+          if($this->newposition[$pos] == '-'){
+            $this->newposition[$pos] = 'o';
+            break;
+          }
+        }
         $move = implode($this->newposition);
         $link = '/acit4850-lab1/?board='.$move;
         return '<td><a href="'.$link.'">-</a></td>';
