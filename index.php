@@ -6,7 +6,19 @@
 </head>
 <body>
   <?php
-    echo 'Hello everybody!';
+    $name = $_GET['name'];
+    $powerLevel = 9000;
+    switch($name){
+      case 'Casper':
+        $hello = 'Hello to me!';
+        break;
+      default:
+        $hello = 'Hello '. $name;
+        break;
+    }
+    echo $hello . '<br/>';
+    echo 'His power level is over ' . $powerLevel . '!<br/>';
+
   ?>
 </body>
 </html>
