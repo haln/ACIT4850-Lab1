@@ -77,7 +77,12 @@
       }
     }
 
-    $position = $_GET['board'];
+    if(isset($_GET['board'])){
+      $position = $_GET['board'];
+    }
+    else{
+      $position = "---------";
+    }
 
     $game = new Game($position);
     $game->display();
