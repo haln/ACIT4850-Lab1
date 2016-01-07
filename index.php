@@ -8,6 +8,7 @@
   <?php
     class Game{
       var $position;
+      var $newposition;
 
       function __construct($squares){
         $this->position = str_split($squares);
@@ -45,45 +46,42 @@
 
       function show_cell($which){
         $token = $this->position[$which];
-        if($token <> '-') return '<td>'.$token.'</td>';
+        if($token <> '-'){
+          return '<td>'.$token.'</td>';
+        }
         $this->newposition = $this->position;
-        $this->newposition[$which] = 'o';
+        $this->newposition[$which] = 'x';
         $move = implode($this->newposition);
-        $link = '/?board='.$move;
+        $link = '/acit4850-lab1/?board='.$move;
         return '<td><a href="'.$link.'">-</a></td>';
       }
-    }
 
-    function display(){
-      echo '<table cols="3" style="font-size:large; font-weight:bold">';
-      echo '<tr>';
-      for($pos=0; $pos<9; $pos++){
-        echo $this->show_cell($pos);
-        if($pos %3 == 2){
-          echo '</tr><tr>';
+      function display(){
+        echo '<table cols="3" style="font-size:large; font-weight:bold">';
+        echo '<tr>';
+        for($pos=0; $pos<9; $pos++){
+          echo $this->show_cell($pos);
+          if($pos %3 == 2){
+            echo '</tr><tr>';
+          }
         }
+        echo '</tr>';
+        echo '</table>';
       }
-      echo '</tr>';
-      echo '</table>';
     }
 
-    if(isset($_GET['board'])){
-      $position = $_GET['board'];
-      $squares = str_split($position);
+    $position = $_GET['board'];
 
-      $game = new Game($squares);
-      if($game->winner('x')){
-        echo 'You win. Lucky guesses!';
-      }
-      else if($game->winner('o')){
-        echo 'I win. Muahahahahaaaa';
-      }
-      else{
-        echo "No winner yet, but you are losing.";
-      }
+    $game = new Game($position);
+    $game->display();
+    if($game->winner('x')){
+      echo 'You win. Lucky guesses!';
+    }
+    else if($game->winner('o')){
+      echo 'I win. Muahahahahaaaa';
     }
     else{
-      echo "No board";
+      echo "No winner yet, but you are losing.";
     }
 
     /*
