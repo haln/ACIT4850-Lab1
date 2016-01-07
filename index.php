@@ -6,33 +6,49 @@
 </head>
 <body>
   <?php
-    $position = $_GET['board'];
-    $squares = str_split($position);
-
-    function winner($checker, $position){
-      if(($position[0] == $checker) && ($position[4] == $checker) && ($position[8] == $checker)){
-        $won = true;
-      }
-      else if(($position[2] == $checker) && ($position[4] == $checker) && ($position[6] == $checker)){
-        $won = true;
-      }
-      else{
-        for(int i=0; i<3; i++){
-          if(($position[0+(3*i)] == $checker) && ($position[1+(3*i)]) && ($position[2+(3*i)])){
-            $won = true;
-          }
-          else if(($position[0+i] == $checker) && ($position[3+i] == $checker) && ($position[6+i] == $checker)){
-            $won = true;
-          }
-        }
-      }
+    if(isset($_GET['board'])){
+      $position = $_GET['board'];
+      $squares = str_split($position);
+    }
+    else{
+      echo "No board";
     }
 
     if(winner('x',$squares)) echo 'You win.';
     else if(winner('o',$squares)) echo "I win.";
     else echo "No winner yet.";
 
-
   ?>
 </body>
 </html>
+<?php
+  function winner($checker, $position){
+    $won = false;
+
+    if(($position[0] == $checker) && ($position[4] == $checker) && ($position[8] == $checker)){
+      $won = true;
+    }
+    else if(($position[2] == $checker) && ($position[4] == $checker) && ($position[6] == $checker)){
+      $won = true;
+    }
+    else{
+      for($row=0; $row<3; $row++){
+        $result = true;
+        for($col=0; $col<3; $col++){
+          if($position[3*$row+$col] != $checker){
+            $result = false;
+          }
+        }
+        if($result){
+          $won = true;
+        }
+      }
+      for($col=0; $col<3; $col++){
+        if(($position[0+$col] == $checker) && ($position[3+$col] == $checker) && ($position[6+$col] == $checker)){
+          $won = true;
+        }
+      }
+    }
+    return $won;
+  }
+?>
