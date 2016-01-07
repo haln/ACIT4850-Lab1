@@ -6,49 +6,94 @@
 </head>
 <body>
   <?php
+    class Game{
+      var $position;
+
+      function __construct($squares){
+        $this->position = str_split($squares);
+      }
+
+      function winner($checker){
+        $won = false;
+
+        if(($this->position[0] == $checker) && ($this->position[4] == $checker) && ($this->position[8] == $checker)){
+          $won = true;
+        }
+        else if(($this->position[2] == $checker) && ($this->position[4] == $checker) && ($this->position[6] == $checker)){
+          $won = true;
+        }
+        else{
+          for($row=0; $row<3; $row++){
+            $result = true;
+            for($col=0; $col<3; $col++){
+              if($this->position[3*$row+$col] != $checker){
+                $result = false;
+              }
+            }
+            if($result){
+              $won = true;
+            }
+          }
+          for($col=0; $col<3; $col++){
+            if(($this->position[0+$col] == $checker) && ($this->position[3+$col] == $checker) && ($this->position[6+$col] == $checker)){
+              $won = true;
+            }
+          }
+        }
+        return $won;
+      }
+
+      function show_cell($which){
+        $token = $this->position[$which];
+        if($token <> '-') return '<td>'.$token.'</td>';
+        $this->newposition = $this->position;
+        $this->newposition[$which] = 'o';
+        $move = implode($this->newposition);
+        $link = '/?board='.$move;
+        return '<td><a href="'.$link.'">-</a></td>';
+      }
+    }
+
+    function display(){
+      echo '<table cols="3" style="font-size:large; font-weight:bold">';
+      echo '<tr>';
+      for($pos=0; $pos<9; $pos++){
+        echo $this->show_cell($pos);
+        if($pos %3 == 2){
+          echo '</tr><tr>';
+        }
+      }
+      echo '</tr>';
+      echo '</table>';
+    }
+
     if(isset($_GET['board'])){
       $position = $_GET['board'];
       $squares = str_split($position);
+
+      $game = new Game($squares);
+      if($game->winner('x')){
+        echo 'You win. Lucky guesses!';
+      }
+      else if($game->winner('o')){
+        echo 'I win. Muahahahahaaaa';
+      }
+      else{
+        echo "No winner yet, but you are losing.";
+      }
     }
     else{
       echo "No board";
     }
 
+    /*
     if(winner('x',$squares)) echo 'You win.';
     else if(winner('o',$squares)) echo "I win.";
     else echo "No winner yet.";
-
+    */
   ?>
 </body>
 </html>
 <?php
-  function winner($checker, $position){
-    $won = false;
 
-    if(($position[0] == $checker) && ($position[4] == $checker) && ($position[8] == $checker)){
-      $won = true;
-    }
-    else if(($position[2] == $checker) && ($position[4] == $checker) && ($position[6] == $checker)){
-      $won = true;
-    }
-    else{
-      for($row=0; $row<3; $row++){
-        $result = true;
-        for($col=0; $col<3; $col++){
-          if($position[3*$row+$col] != $checker){
-            $result = false;
-          }
-        }
-        if($result){
-          $won = true;
-        }
-      }
-      for($col=0; $col<3; $col++){
-        if(($position[0+$col] == $checker) && ($position[3+$col] == $checker) && ($position[6+$col] == $checker)){
-          $won = true;
-        }
-      }
-    }
-    return $won;
-  }
 ?>
